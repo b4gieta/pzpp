@@ -11,7 +11,10 @@ namespace pzpp.Models
         public int CreatedByUserId { get; set; }
         public DateTime CreatedAt { get; set; }
 
+
         // Każdy wątek może mieć wiele postów (Posts) 1:N
         public ICollection<Post> Posts { get; set; }
+        public ICollection<ThreadParticipant> ThreadParticipants { get; set; }
+
     }
 }

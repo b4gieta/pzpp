@@ -11,6 +11,7 @@
         public int AttributeDefinitionId { get; set; }
         public string Value { get; set; }
 
+
         public Character Character { get; set; }
         public CharacterAttributeDefinition AttributeDefinition { get; set; }
     }

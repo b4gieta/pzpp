@@ -12,9 +12,9 @@
         public string Name { get; set; }
         public string IsAlive { get; set; }
 
+
         // Każda postać ma wiele wartości atrybutów (CharacterAttributeValue) 1:N
         public ICollection<CharacterAttributeValue> Attributes { get; set; }
-        
         public User User { get; set; }
         public CharacterTemplate CharacterTemplate { get; set; }
     }

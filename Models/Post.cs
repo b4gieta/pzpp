@@ -15,6 +15,7 @@
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
 
+
         public Thread Thread { get; set; }
         public User User { get; set; }
         public Character Character { get; set; }
