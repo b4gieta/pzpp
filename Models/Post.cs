@@ -12,15 +12,11 @@
 
         // Post może być napisany jako postać (np: Przez gracza który uczęszcza w Wątku/Kampanii )
         public int? CharacterId { get; set; }
-
         public string Content { get; set; }
-
         public DateTime CreatedAt { get; set; }
 
         public Thread Thread { get; set; }
-
         public User User { get; set; }
-
         public Character Character { get; set; }
     }
 }

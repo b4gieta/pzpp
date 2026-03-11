@@ -3,7 +3,6 @@
     public class CharacterTemplate
     {
         public int Id { get; set; }
-
         public string Name { get; set; }
 
         // Każdy szablon postaci jest stworzony przez jednego użytkownika (Game Master'a) 1:1
