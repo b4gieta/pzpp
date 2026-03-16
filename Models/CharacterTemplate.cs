@@ -1,15 +1,19 @@
-﻿namespace pzpp.Models
+﻿using System.Collections.Generic;
+
+namespace pzpp.Models
 {
     public class CharacterTemplate
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
-        // Każdy szablon postaci jest stworzony przez jednego użytkownika (Game Master'a) 1:1
+        // Foreign key to the User who created this template
         public int CreatedByUserId { get; set; }
+        public User CreatedByUser { get; set; }
 
-
-        // Każdy szablon postaci może mieć wiele definicji atrybutów (CharacterAttributeDefinition) 1:N
+        // Each template can have many attribute definitions
         public ICollection<CharacterAttributeDefinition> Attributes { get; set; }
+            = new List<CharacterAttributeDefinition>();
+        public ICollection<Character> Characters { get; set; } = new List<Character>();
     }
 }

@@ -1,20 +1,24 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using System;
+using System.Collections.Generic;
 
 namespace pzpp.Models
 {
     public class Thread
     {
         public int Id { get; set; }
-        public string Title { get; set; }
 
-        // Każdy wątek/kampania jest stworzona przez jednego użytkownika (Game Master) 1:1
+        // Thread title
+        public string Title { get; set; } = string.Empty;
+
+        // Foreign key to User (creator / Game Master)
         public int CreatedByUserId { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public User CreatedByUser { get; set; }
 
+        // Timestamp of creation
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Każdy wątek może mieć wiele postów (Posts) 1:N
-        public ICollection<Post> Posts { get; set; }
-        public ICollection<ThreadParticipant> ThreadParticipants { get; set; }
-
+        // Navigation properties
+        public ICollection<Post> Posts { get; set; } = new List<Post>();
+        public ICollection<ThreadParticipant> ThreadParticipants { get; set; } = new List<ThreadParticipant>();
     }
 }
