@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using pzpp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add DbContext for SQLite
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
