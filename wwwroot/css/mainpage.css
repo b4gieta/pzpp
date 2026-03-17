@@ -28,7 +28,6 @@ body {
     width: 100%;
     height: 200px;
     background-color: #FFA31A;
-    border: 3px solid black;
 }
 
 .logo {
@@ -61,7 +60,6 @@ body {
     height: 10%;
     background-color: #FFA31A;
     bottom: 0;
-    border: 3px solid black;
 }
 
 .main_container {
@@ -69,7 +67,7 @@ body {
     justify-content: center;
     width: 100%;
     height: 80%;
-    background-color: #808080;
+    background-color: #393939;
 }
 
 .main_content {
