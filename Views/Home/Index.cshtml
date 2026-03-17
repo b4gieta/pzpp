@@ -2,7 +2,24 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@section Styles {
+    <link rel="stylesheet" href="~/css/mainpage.css" />
+}
+
+<div class="main_content">
+    <div class="main_info">
+        <p></p>
+    </div>
+    <div class="main_threads">
+        @* Tutaj geneorwanie wątków np. @RenderAvaliableThreads *@
+    </div>
+</div>
+
+<div class="side_pannel">
+    <div class="events_pannel">
+        @* Tutaj geneorwanie aktywnych eventów np. @RenderActiveEvents *@
+    </div>
+    <div class="activity_pannel">
+        @* Tutaj geneorwanie jakiś ostatnich aktywności na stronie albo graczy online np. @RenderLastActivity *@
+    </div>
 </div>

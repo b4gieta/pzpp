@@ -7,9 +7,27 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/pzpp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/mainpage.css" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <header>
+    <div class="main_header">
+        <div class="logo">
+            @* Tutaj logo *@
+        </div>
+        <div class="menu">
+            @* Tutaj na sztywno wpisać guziki przekierowujące na inne podstrony *@
+        </div>
+        <div class="user_panel">
+            @* Tutaj geneorwanie informacji o użytkowniku np. @RenderUserInfo *@
+        </div>
+    </div>
+    <div class="main_container">
+        @RenderBody()
+    </div>
+    <div class="main_footer"></div>
+
+    @* <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">pzpp</a>
@@ -41,6 +59,8 @@
             &copy; 2026 - pzpp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    *@
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
