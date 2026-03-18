@@ -18,19 +18,32 @@
         <div class="menu">
             @* Tutaj na sztywno wpisać guziki przekierowujące na inne podstrony *@
         </div>
+            @* Logowanie *@
+        @{
+            var currentUser = Context.Session.GetString("user");
+        }
         <div class="user_panel d-flex flex-column justify-content-end align-items-center pb-3">
-            @* Bedzie trzeba sprawdzac, czy zalogowany *@
-            <form class="d-flex mb-2 w-100 px-3">
-                <input type="text" class="form-control form-control-sm me-2" placeholder="Login" required>
-                <input type="password" class="form-control form-control-sm me-2" placeholder="Hasło" required>
-                <button type="submit" class="btn btn-sm" style="background-color: #FFA31A; color: #000; font-weight: bold;">Zaloguj</button>
-            </form>
-            <div class="d-flex align-items-center mt-1">
-                <span class="small me-2 text-white">Nie masz konta?</span>
-                <button type="button" class="btn btn-sm btn-outline-light" style="border-color: #FFA31A; color: #FFA31A;" data-bs-toggle="modal" data-bs-target="#registerModal">
-                    Zarejestruj się
+            @if (!string.IsNullOrEmpty(currentUser))
+            {
+                <span class="text-white me-2">Witaj, @currentUser!</span>
+                <button id="logoutBtn" type="button" class="btn btn-sm" style="background-color: #FFA31A; color: #000; font-weight: bold;">
+                    Wyloguj
                 </button>
-            </div>
+            }
+            else
+            {
+                <form id="loginForm" method="post" asp-controller="Auth" asp-action="Login" class="d-flex mb-2 w-100 px-3">
+                    <input name="username" type="text" class="form-control form-control-sm me-2" placeholder="Login" required>
+                    <input name="password" type="password" class="form-control form-control-sm me-2" placeholder="Hasło" required>
+                    <button type="submit" class="btn btn-sm" style="background-color: #FFA31A; color: #000; font-weight: bold;">Zaloguj</button>
+                </form>
+                <div class="d-flex align-items-center mt-1">
+                    <span class="small me-2 text-white">Nie masz konta?</span>
+                    <button type="button" class="btn btn-sm btn-outline-light" style="border-color: #FFA31A; color: #FFA31A;" data-bs-toggle="modal" data-bs-target="#registerModal">
+                        Zarejestruj się
+                    </button>
+                </div>
+            }
         </div>
     </div>
     <div class="main_container">
@@ -81,24 +94,25 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Zamknij"></button>
           </div>
           <div class="modal-body">
-            <form>
+            <form id="registerForm" method="post" asp-controller="Auth" asp-action="Register">
               <div class="mb-3">
-                <label for="registerName" class="form-label">Nazwa użytkownika</label>
-                <input type="text" class="form-control" id="registerName" required>
+                <label class="form-label">Nazwa użytkownika</label>
+                <input type="text" class="form-control" name="username" required>
               </div>
               <div class="mb-3">
-                <label for="registerEmail" class="form-label">Adres email</label>
-                <input type="email" class="form-control" id="registerEmail" required>
+                <label class="form-label">Adres email</label>
+                <input type="email" class="form-control" name="email" required>
               </div>
               <div class="mb-3">
-                <label for="registerPassword" class="form-label">Hasło</label>
-                <input type="password" class="form-control" id="registerPassword" required>
+                <label class="form-label">Hasło</label>
+                <input type="password" class="form-control" name="password" required>
               </div>
               <div class="mb-3">
-                <label for="registerConfirmPassword" class="form-label">Potwierdź hasło</label>
-                <input type="password" class="form-control" id="registerConfirmPassword" required>
+                <label class="form-label">Potwierdź hasło</label>
+                <input type="password" class="form-control" name="confirmPassword" required>
               </div>
               <button type="submit" class="btn w-100 mt-2" style="background-color: #FFA31A; color: black; font-weight: bold;">Zarejestruj się</button>
+               <div id="registerMessage" class="mt-2 text-center"></div> 
             </form>
           </div>
         </div>
@@ -107,6 +121,69 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AJAX - zeby nie przeladowywal strony -->
+    <script>
+        $(document).ready(function () {
+            function handleAjaxForm(formId, messageId, onSuccess) {
+                $(formId).submit(function(e) {
+                    e.preventDefault();
+
+                    var form = $(this);
+                    var url = form.attr('action');
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: form.serialize(),
+                        success: function(response) {
+                            $(messageId)
+                                .removeClass('text-danger')
+                                .addClass('text-success')
+                                .text(response);
+
+                            if (onSuccess) onSuccess(form);
+                        },
+                        error: function(xhr) {
+                            $(messageId)
+                                .removeClass('text-success')
+                                .addClass('text-danger')
+                                .text(xhr.responseText);
+                        }
+                    });
+                });
+            }
+
+            // Rejestracja
+            handleAjaxForm('#registerForm', '#registerMessage', function(form) {
+                setTimeout(function() {
+                    $('#registerModal').modal('hide');
+                }, 1500);
+                form[0].reset();
+            });
+
+            // Logowanie
+            handleAjaxForm('#loginForm', '#loginMessage', function(form) {
+                setTimeout(function() {
+                    location.reload();
+                }, 1000);
+            });
+
+            // Wylogowanie
+            $(document).on('click', '#logoutBtn', function() {
+                $.ajax({
+                    type: "POST",
+                    url: '/Auth/Logout',
+                    success: function(response) {
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        alert("Błąd przy wylogowaniu: " + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
