@@ -2,6 +2,8 @@
     ViewData["Title"] = "Home Page";
 }
 
+@model List<Thread>
+
 @section Styles {
     <link rel="stylesheet" href="~/css/mainpage.css" />
 }
@@ -10,8 +12,42 @@
     <div class="main_info">
         <p></p>
     </div>
+
+    <div class="create_thread_box">
+        <div class="create_thread_header" onclick="toggleCreateThread()">
+            + Utwórz wątek
+        </div>
+        <div class="create_thread_body" id="createThreadForm">
+            <form method="post" action="/Thread/CreateWithPost">
+                <input type="text" name="title" placeholder="Tytuł wątku..." required />
+
+                <textarea name="content" placeholder="Pierwszy post..." required></textarea>
+
+                <button type="submit">Dodaj</button>
+            </form>
+        </div>
+    </div>
+
     <div class="main_threads">
-        @* Tutaj geneorwanie wątków np. @RenderAvaliableThreads *@
+
+        <div class="thread_list">
+            @foreach (var thread in Model)
+            {
+                var lastPostDate = thread.Posts.Any() ? thread.Posts.Max(p => p.CreatedAt) : thread.CreatedAt;
+
+                <div class="thread_item">
+                    <div class="thread_row">
+                        <a class="thread_title" href="/Thread?id=@thread.Id">
+                            @thread.Title
+                        </a>
+
+                        <div class="thread_meta">
+                            @lastPostDate.ToString("dd.MM.yyyy HH:mm")
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>
 
@@ -23,3 +59,10 @@
         @* Tutaj geneorwanie jakiś ostatnich aktywności na stronie albo graczy online np. @RenderLastActivity *@
     </div>
 </div>
+
+<script>
+    function toggleCreateThread() {
+        const el = document.getElementById("createThreadForm");
+        el.style.display = el.style.display === "block" ? "none" : "block";
+    }
+</script>
