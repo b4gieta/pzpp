@@ -25,10 +25,12 @@
         <div class="user_panel d-flex flex-column justify-content-end align-items-center pb-3">
             @if (!string.IsNullOrEmpty(currentUser))
             {
-                <span class="text-white me-2">Witaj, @currentUser!</span>
-                <button id="logoutBtn" type="button" class="btn btn-sm" style="background-color: #FFA31A; color: #000; font-weight: bold;">
-                    Wyloguj
-                </button>
+                <div class="d-flex flex-column justify-content-center align-items-center w-100 mb-4">
+                    <span class="text-white mb-2">Witaj, @currentUser!</span>
+                    <button id="logoutBtn" type="button" class="btn btn-sm" style="background-color: #FFA31A; color: #000; font-weight: bold;">
+                        Wyloguj
+                    </button>
+                </div>
             }
             else
             {
