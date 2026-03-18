@@ -1,0 +1,67 @@
+﻿@model Thread
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/mainpage.css" />
+}
+
+<div class="main_content">
+
+    <div class="thread_container">
+
+        <a href="@Url.Action("Index", "Home")">← Powrót do strony głównej</a>
+
+        <div class="thread_header">
+            <h2>@Model.Title</h2>
+        </div>
+
+        <div class="post_list">
+            @foreach (var post in Model.Posts.OrderBy(p => p.CreatedAt))
+            {
+                <div class="post_item">
+                    
+                    <div class="post_content">
+                        @post.Content
+                    </div>
+
+                    <div class="post_meta">
+                        @post.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                    </div>
+
+                </div>
+            }
+        </div>
+
+        <div class="add_post_box">
+
+            <div class="add_post_header" onclick="togglePostBox()">
+                + Dodaj odpowiedź
+            </div>
+
+            <div class="add_post_body" id="postForm">
+                <form method="post" action="/Post/Create">
+                    
+                    <input type="hidden" name="threadId" value="@Model.Id" />
+
+                    <textarea name="content" placeholder="Napisz odpowiedź..." required></textarea>
+
+                    <button type="submit">Dodaj</button>
+
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function togglePostBox() {
+    const el = document.getElementById("postForm");
+    el.style.display = el.style.display === "block" ? "none" : "block";
+}
+</script>
