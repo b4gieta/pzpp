@@ -18,8 +18,19 @@
         <div class="menu">
             @* Tutaj na sztywno wpisać guziki przekierowujące na inne podstrony *@
         </div>
-        <div class="user_panel">
-            @* Tutaj geneorwanie informacji o użytkowniku np. @RenderUserInfo *@
+        <div class="user_panel d-flex flex-column justify-content-end align-items-center pb-3">
+            @* Bedzie trzeba sprawdzac, czy zalogowany *@
+            <form class="d-flex mb-2 w-100 px-3">
+                <input type="text" class="form-control form-control-sm me-2" placeholder="Login" required>
+                <input type="password" class="form-control form-control-sm me-2" placeholder="Hasło" required>
+                <button type="submit" class="btn btn-sm" style="background-color: #FFA31A; color: #000; font-weight: bold;">Zaloguj</button>
+            </form>
+            <div class="d-flex align-items-center mt-1">
+                <span class="small me-2 text-white">Nie masz konta?</span>
+                <button type="button" class="btn btn-sm btn-outline-light" style="border-color: #FFA31A; color: #FFA31A;" data-bs-toggle="modal" data-bs-target="#registerModal">
+                    Zarejestruj się
+                </button>
+            </div>
         </div>
     </div>
     <div class="main_container">
@@ -60,6 +71,39 @@
         </div>
     </footer>
     *@
+
+    <!-- Rejestracja pop-up -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #292929; color: white; border: 1px solid #FFA31A;">
+          <div class="modal-header border-bottom-0">
+            <h5 class="modal-title" id="registerModalLabel">Rejestracja</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="registerName" class="form-label">Nazwa użytkownika</label>
+                <input type="text" class="form-control" id="registerName" required>
+              </div>
+              <div class="mb-3">
+                <label for="registerEmail" class="form-label">Adres email</label>
+                <input type="email" class="form-control" id="registerEmail" required>
+              </div>
+              <div class="mb-3">
+                <label for="registerPassword" class="form-label">Hasło</label>
+                <input type="password" class="form-control" id="registerPassword" required>
+              </div>
+              <div class="mb-3">
+                <label for="registerConfirmPassword" class="form-label">Potwierdź hasło</label>
+                <input type="password" class="form-control" id="registerConfirmPassword" required>
+              </div>
+              <button type="submit" class="btn w-100 mt-2" style="background-color: #FFA31A; color: black; font-weight: bold;">Zarejestruj się</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
