@@ -1,45 +1,36 @@
-﻿using System.Text.Json;
+﻿using pzpp.Data;
 using pzpp.Models;
+using System.Text.Json;
 namespace pzpp.Services
 {
     public class UserService
     {
-        private readonly string filePath = "users.json";
+        private readonly AppDbContext _context;
 
-        public List<User> GetAll()
+        public UserService(AppDbContext context)
         {
-            if (!File.Exists(filePath))
-                return new List<User>();
-
-            var json = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
-        }
-
-        public void SaveAll(List<User> users)
-        {
-            var json = JsonSerializer.Serialize(users, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-
-            File.WriteAllText(filePath, json);
+            _context = context;
         }
 
         public User? GetByLogin(string login)
         {
-            return GetAll().FirstOrDefault(u => u.Login == login);
+            return _context.Users.FirstOrDefault(u => u.Login == login);
         }
 
         public bool UserExists(string login)
         {
-            return GetAll().Any(u => u.Login == login);
+            return _context.Users.Any(u => u.Login == login);
         }
 
         public void Add(User user)
         {
-            var users = GetAll();
-            users.Add(user);
-            SaveAll(users);
+            _context.Users.Add(user);
+            _context.SaveChanges();
+        }
+
+        public List<User> GetAll()
+        {
+            return _context.Users.ToList();
         }
     }
 }

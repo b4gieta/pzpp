@@ -13,20 +13,28 @@
         <p></p>
     </div>
 
-    <div class="create_thread_box">
-        <div class="create_thread_header" onclick="toggleCreateThread()">
-            + Utwórz wątek
-        </div>
-        <div class="create_thread_body" id="createThreadForm">
-            <form method="post" action="/Thread/CreateWithPost">
-                <input type="text" name="title" placeholder="Tytuł wątku..." required />
+    @{
+        var currentUser = Context.Session.GetString("user");
+    }
 
-                <textarea name="content" placeholder="Pierwszy post..." required></textarea>
+    @if (!string.IsNullOrEmpty(currentUser))
+    {
+        <div class="create_thread_box">
+            <div class="create_thread_header" onclick="toggleCreateThread()">
+                + Utwórz wątek
+            </div>
+            <div class="create_thread_body" id="createThreadForm">
+                <form method="post" action="/Thread/CreateWithPost">
+                    <input type="text" name="title" placeholder="Tytuł wątku..." required />
 
-                <button type="submit">Dodaj</button>
-            </form>
+                    <textarea name="content" placeholder="Pierwszy post..." required></textarea>
+
+                    <button type="submit">Dodaj</button>
+                </form>
+            </div>
         </div>
-    </div>
+    }
+    
 
     <div class="main_threads">
 

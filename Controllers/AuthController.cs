@@ -7,8 +7,14 @@ namespace pzpp.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly UserService _userService = new UserService();
+        private readonly UserService _userService;
         private readonly PasswordHasher<User> _hasher = new PasswordHasher<User>();
+
+        public AuthController(UserService userService)
+        {
+            _userService = userService;
+            _hasher = new PasswordHasher<User>();
+        }
 
         [HttpPost]
         public IActionResult Register(string username, string email, string password, string confirmPassword)
@@ -48,8 +54,6 @@ namespace pzpp.Controllers
             HttpContext.Session.SetString("user", user.Login);
 
             user.LastLogin = DateTime.UtcNow;
-            var users = _userService.GetAll();
-            _userService.SaveAll(users);
 
             return Ok("Zalogowano");
         }

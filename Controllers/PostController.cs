@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using pzpp.Data;
 using pzpp.Models;
+using System.Threading;
 
 public class PostController : Controller
 {
@@ -18,17 +19,20 @@ public class PostController : Controller
         if (string.IsNullOrWhiteSpace(content))
             return RedirectToAction("Index", "Thread", new { id = threadId });
 
+        var username = HttpContext.Session.GetString("user");
+        var user = _context.Users.Where(u => u.Login == username).FirstOrDefault();
+
         var post = new Post
         {
             ThreadId = threadId,
             Content = content,
             CreatedAt = DateTime.UtcNow,
-            UserId = 1
+            UserId = user.Id
         };
 
         _context.Posts.Add(post);
         _context.SaveChanges();
 
-        return RedirectToAction("Index", "Thread", new { id = threadId });
+        return Redirect($"/Thread?id={threadId}");
     }
 }
