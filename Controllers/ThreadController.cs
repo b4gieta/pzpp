@@ -2,14 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using pzpp.Data;
 using pzpp.Models;
+using pzpp.Services;
 
 public class ThreadController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly UserService _userService;
 
-    public ThreadController(AppDbContext context)
+    public ThreadController(AppDbContext context, UserService userService)
     {
         _context = context;
+        _userService = userService;
     }
 
     public IActionResult Index(int? id)
@@ -40,20 +43,18 @@ public class ThreadController : Controller
     [HttpPost]
     public IActionResult CreateWithPost(string title, string content)
     {
-        var user = _context.Users.FirstOrDefault();
+        var username = HttpContext.Session.GetString("user");
+        if (username == null) return Unauthorized();
 
-        if (user == null)
-        {
-            user = new User { Id = 1 };
-            _context.Users.Add(user);
-            _context.SaveChanges();
-        }
+        // user z DB (TEN jest potrzebny do ID)
+        var dbUser = _context.Users.FirstOrDefault(u => u.Login == username);
+        if (dbUser == null) return BadRequest("User nie istnieje w DB");
 
         var thread = new pzpp.Models.Thread
         {
             Title = title,
             CreatedAt = DateTime.UtcNow,
-            CreatedByUserId = user.Id
+            CreatedByUserId = dbUser.Id
         };
 
         _context.Threads.Add(thread);
@@ -64,12 +65,12 @@ public class ThreadController : Controller
             ThreadId = thread.Id,
             Content = content,
             CreatedAt = DateTime.UtcNow,
-            UserId = user.Id
+            UserId = dbUser.Id
         };
 
         _context.Posts.Add(post);
         _context.SaveChanges();
 
-        return RedirectToAction("Index", new { id = thread.Id });
+        return Redirect($"/Thread?id={thread.Id}");
     }
 }

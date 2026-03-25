@@ -18,43 +18,51 @@
             <h2>@Model.Title</h2>
         </div>
 
+        @inject pzpp.Data.AppDbContext _context
+
         <div class="post_list">
             @foreach (var post in Model.Posts.OrderBy(p => p.CreatedAt))
             {
+                var author = _context.Users.FirstOrDefault(u => u.Id == post.UserId);
+
                 <div class="post_item">
-                    
                     <div class="post_content">
                         @post.Content
                     </div>
 
                     <div class="post_meta">
-                        @post.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                        @author?.Login — @post.CreatedAt.ToString("dd.MM.yyyy HH:mm")
                     </div>
-
                 </div>
             }
         </div>
 
-        <div class="add_post_box">
+        @{
+            var currentUser = Context.Session.GetString("user");
+        }
 
-            <div class="add_post_header" onclick="togglePostBox()">
-                + Dodaj odpowiedź
+        @if (!string.IsNullOrEmpty(currentUser))
+        {
+            <div class="add_post_box">
+
+                <div class="add_post_header" onclick="togglePostBox()">
+                    + Dodaj odpowiedź
+                </div>
+
+                <div class="add_post_body" id="postForm">
+                    <form method="post" action="/Post/Create">
+
+                        <input type="hidden" name="threadId" value="@Model.Id" />
+
+                        <textarea name="content" placeholder="Napisz odpowiedź..." required></textarea>
+
+                        <button type="submit">Dodaj</button>
+
+                    </form>
+                </div>
+
             </div>
-
-            <div class="add_post_body" id="postForm">
-                <form method="post" action="/Post/Create">
-                    
-                    <input type="hidden" name="threadId" value="@Model.Id" />
-
-                    <textarea name="content" placeholder="Napisz odpowiedź..." required></textarea>
-
-                    <button type="submit">Dodaj</button>
-
-                </form>
-            </div>
-
-        </div>
-
+        }
     </div>
 
 </div>
